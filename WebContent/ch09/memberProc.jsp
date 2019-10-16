@@ -22,16 +22,36 @@
                         <tr align="center" bgcolor="#996600">
                             <td colspan="3">
                                 <font color="#FFFFFFF">
-                                    <b>@@회원님이 작성하신 내용입니다. 확인해 주세요.</b>
+                                    <b><jsp:getProperty property="name" name="regBean"/>회원님이 작성하신 내용입니다. 확인해 주세요.</b>
                                 </font>
                             </td>
                         </tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr></tr>
-                        <tr></tr>
+                        <tr>
+                            <td width=24%>아이디</td>
+                            <td width=41%><jsp:getProperty property="id" name="regBean"/></td>
+                        </tr>
+                        <tr>
+                        	<td>패스워드</td>
+                        	<td><jsp:getProperty property="pwd" name="regBean"/></td>
+                        </tr>
+                        <tr>
+                            <td>이름</td>
+                        	<td><jsp:getProperty property="name" name="regBean"/></td>
+                        </tr>
+                        <tr>
+                        	<td>생년월일</td>
+                        	<td><jsp:getProperty property="birthday" name="regBean"/></td>
+                        </tr>
+                        <tr>
+                        	<td>이메일</td>
+                        	<td><jsp:getProperty property="email" name="regBean"/></td>
+                        </tr>
+                        <tr>
+                        	<td colspan="2" align="center">
+                        		<input type="submit" value="확인완료">&nbsp;
+                        		<input type="button" value="다시쓰기" onClick="history.back()">
+                        	</td>
+                        </tr>
                     </form>
                 </table>
             </td>

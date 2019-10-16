@@ -10,7 +10,7 @@
     <table width="80%" align="center" border="0" cellspacing="0" cellpadding="5">
         <td align="center" valign="middle" bgcolor="#FFFFCC">
             <table width="90%" border="1" align="center" cellspacing="0" cellpadding="2">
-                <form name="regForm" method="POST" action="registerProc.jsp">
+                <form name="regForm" method="POST" action="memberProc.jsp">
                     <tr align="center" bgcolor="#996600">
                         <td colspan="3"><font color="#FFFFFF"><b>회원가입</b></font></td>
                     </tr>
