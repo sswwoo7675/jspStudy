@@ -1,18 +1,17 @@
 package ch11;
+
 import java.sql.*;
 import java.util.*;
 
-public class RegisterMgr {
-	private final String JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
-	private final String JDBC_URL = "jdbc:mysql://localhost:3306/mydb";
-	private final String USER = "root";
-	private final String PASS = "swo0836@@";
+public class RegisterMgrPool {
 	
-	public RegisterMgr() {
+	private DBConnectionMgr pool = null;
+	
+	public RegisterMgrPool() {
 		try {
-			Class.forName(JDBC_DRIVER);
+			pool = DBConnectionMgr.getInstance();
 		} catch(Exception e) {
-			System.out.println("Error : JDBC 드라이버 로딩 실패");
+			System.out.println("Error : 커넥션 얻어오기 실패");
 		}
 	}
 	
@@ -24,7 +23,7 @@ public class RegisterMgr {
 		Vector<RegisterBean> vlist = new Vector<RegisterBean>();
 		
 		try {
-			conn = DriverManager.getConnection(JDBC_URL,USER,PASS);
+			conn = pool.getConnection();
 			String strQuery = "select * from tblregister";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(strQuery);
@@ -45,9 +44,7 @@ public class RegisterMgr {
 		} catch(Exception e) {
 			System.out.println("Exception: " + e);
 		} finally {
-			if(rs!=null) try {rs.close();} catch(SQLException e){}
-			if(stmt!=null) try {stmt.close();} catch(SQLException e){}
-			if(conn!=null) try {conn.close();} catch(SQLException e){}
+			pool.freeConnection(conn);
 		}
 	return vlist;
 	}

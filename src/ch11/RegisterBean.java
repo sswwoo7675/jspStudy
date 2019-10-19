@@ -66,4 +66,10 @@ public class RegisterBean {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	public String getJob() {
+		return job;
+	}
+	public void setJob(String job) {
+		this.job = job;
+	}
 }
