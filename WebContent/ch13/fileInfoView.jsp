@@ -8,7 +8,7 @@
 
 <%
 	String saveFolder="C:/jsp/myapp/WebContent/ch13/filestorage/";
-	String encType="utf-8";
+	String encType="euc-kr";
 	int maxSize = 10*1024*1024; //10M
 	
 	ServletContext context = getServletContext();
@@ -28,7 +28,7 @@
 		
 		Enumeration files = multi.getFileNames();
 		while(files.hasMoreElements()){
-			String name = (Stirng)files.nextElement();
+			String name = (String)files.nextElement();
 			saveFiles.add(multi.getFilesystemName(name));
 			origFile.add(multi.getOriginalFileName(name));
 		}
@@ -66,8 +66,30 @@
 				<textarea cols="50" rows="5" disabled><%=content%></textarea>
 			</td>
 		</tr>
-		<tr></tr>
-		<tr></tr>
+		<tr>
+			<td colspan="4" bgcolor="#ffffff">&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="4"><strong>업로드 된 파일들입니다.</strong></td>
+		</tr>
+<%
+		for(int i=0;i<saveFiles.size();i++){
+%>			
+		<tr bgcolor="#FFCC00">
+			<td colsapn="4">
+			<a href="<%="./filestorage/" + saveFiles.get(i)%>"><strong><%=origFile.get(i)%></strong></a>
+			</td>
+		</tr>
+<%		
+		}
+%>
 	</table>
 </body>
 </html>
+<%
+	}catch(IOException ioe){
+		System.out.println(ioe);
+	}catch(Exception ex){
+		System.out.println(ex);
+	}
+%>
