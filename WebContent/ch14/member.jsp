@@ -9,7 +9,7 @@
 <script type="text/javascript" src="script.js"></script>
 <script type="text/javascript">
 	function idCheck(id) {
-	    frm = document.refFrm;
+	    frm = document.regFrm;
 	    if(id == ""){
 	        alert("아이디를 입력해 주세요.");
 	        frm.id.focus();
@@ -28,7 +28,7 @@
 <body bgcolor="#FFFFCC" onLoad="regFrm.id.focus()">
 	<div align="center">
 		<br/><br/>
-		<form name = "refFrm" methode = "post" action="memberProc.jsp">
+		<form name = "regFrm" method="post" action="memberProc.jsp">
 			<table cellpadding="5">
 				<tr>
 					<td bgcolor="#FFFFCC">
@@ -137,9 +137,9 @@
 							</tr>
 							<tr>
 								<td colspan="3" align="center">
-									<input type="button" value="회원가입" onclik="inputCheck()">
+									<input type="button" value="회원가입" onclick="inputCheck()">
 									<input type="reset" value="다시쓰기">
-									<input type="button" value="로그인" onclik="javascript:location.href='login.jsp'">
+									<input type="button" value="로그인" onclick="javascript:location.href='login.jsp'">
 								</td>
 							</tr>
 						</table>
