@@ -66,4 +66,50 @@ public class MemberMgr {
 		}
 		return vlist;
 	}
+	
+	//회원가입
+	public boolean insertMember(MemberBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag = false;
+		
+		try {
+			con = pool.getConnection();
+			sql = "insert tblMember(id,pwd,name,gender,birthday,email,zipcode,address,hobby,job)values(?,?,?,?,?,?,?,?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getId());
+			pstmt.setString(2, bean.getPwd());
+			pstmt.setString(3, bean.getName());
+			pstmt.setString(4, bean.getGender());
+			pstmt.setString(5, bean.getBirthday());
+			pstmt.setString(6, bean.getEmail());
+			pstmt.setString(7, bean.getZipcode());
+			pstmt.setString(8, bean.getAddress());
+			String hobby[] = bean.getHobby();
+			
+			char hb[] = {'0','0','0','0','0'};
+			String list[] = {"인터넷", "여행", "게임", "영화", "운동"};
+			
+			for(int i = 0; i<hobby.length;i++) {
+				for(int j=0; j<list.length;j++) {
+					System.out.println(hobby[i] + "=?" + list[j]);
+					if(hobby[i].equals(list[j])) {
+						hb[j]='1';
+					}
+				}
+			}
+			pstmt.setString(9, new String(hb));
+			pstmt.setString(10, bean.getJob());
+			
+			if(pstmt.executeUpdate()==1) {
+				flag=true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 }
