@@ -4,6 +4,10 @@ import java.sql.*;
 import java.util.Vector;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import java.io.*;
@@ -210,6 +214,40 @@ public class BoardMgr {
 			pool.freeConnection(con,pstmt,rs);
 		}
 		return bean;
+	}
+	
+	public void downLoad(HttpServletRequest req, HttpServletResponse res, JspWriter out, PageContext pageContext) {
+		try {
+			String filename = req.getParameter("filename");
+			File file = new File(UtilMgr.con(SAVEFOLDER + File.separator + filename));
+			byte b[] = new byte[(int) file.length()];
+			res.setHeader("Accept-Ranges", "bytes");
+			String strClient = req.getHeader("User-Agent");
+			if (strClient.indexOf("MSIE6.0")!=-1) {
+				res.setContentType("application/smnet;charset=utf-8");
+				res.setHeader("Content-Disposition", "filename=" + filename + ";");
+			} else {
+				res.setContentType("application/smnet;charset=utf-8");
+				res.setHeader("Content-Disposition", "attachment;filename="+ filename + ";");
+			}
+			out.clear();
+			out = pageContext.pushBody();
+			
+			if (file.isFile()) {
+				BufferedInputStream fin = new BufferedInputStream(
+						new FileInputStream(file));
+				BufferedOutputStream outs = new BufferedOutputStream(
+						res.getOutputStream());
+				int read = 0;
+				while ((read = fin.read(b)) != -1) {
+					outs.write(b, 0, read);
+				}
+				outs.close();
+				fin.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//페이징 및 블럭 테스트를 위한 게시물 저장 메소드 

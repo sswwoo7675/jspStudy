@@ -15,4 +15,14 @@ public class UtilMgr {
 		result.append(str.substring(s));
 		return result.toString();
 	}
+	
+	public static String con(String s) {
+		String str = null;
+		try {
+			str = new String(s.getBytes("UTF-8"),"ksc5601");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return str;
+	}
 }
