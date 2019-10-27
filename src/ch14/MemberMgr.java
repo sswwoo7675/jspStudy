@@ -93,7 +93,6 @@ public class MemberMgr {
 			
 			for(int i = 0; i<hobby.length;i++) {
 				for(int j=0; j<list.length;j++) {
-					System.out.println(hobby[i] + "=?" + list[j]);
 					if(hobby[i].equals(list[j])) {
 						hb[j]='1';
 					}
@@ -112,4 +111,29 @@ public class MemberMgr {
 		}
 		return flag;
 	}
+	
+	//·Î±×ÀÎ
+	public boolean loginMember(String id, String pwd) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		boolean flag = false;
+		
+		try {
+			con = pool.getConnection();
+			sql = "select id from tblMember where id = ? and pwd = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, pwd);
+			rs = pstmt.executeQuery();
+			flag = rs.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return flag;
+	}
+	
 }
