@@ -11,10 +11,11 @@ import javax.servlet.jsp.PageContext;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import java.io.*;
+import java.net.URLEncoder;
 
 public class BoardMgr {
 	private DBConnectionMgr pool;
-	private static final String SAVEFOLDER = "C:/Jsp/myapp/WebContent/ch15/fileupload";
+	private static final String SAVEFOLDER = "C:/Jsp/jspStudy/WebContent/ch15/fileupload";//C:\jsp\jspStudy\WebContent\ch15\fileupload
 	private static final String ENCTYPE = "UTF-8";
 	private static final int MAXSIZE = 5*1024*1024;
 	
@@ -218,12 +219,16 @@ public class BoardMgr {
 	
 	public void downLoad(HttpServletRequest req, HttpServletResponse res, JspWriter out, PageContext pageContext) {
 		try {
+			req.setCharacterEncoding("UTF-8");
 			String filename = req.getParameter("filename");
-			File file = new File(UtilMgr.con(SAVEFOLDER + File.separator + filename));
+			//File file = new File(URLEncoder.encode((SAVEFOLDER + File.separator+ filename),"UTF-8"));
+			//File file = new File(UtilMgr.con(SAVEFOLDER + File.separator+ filename));
+			//File file = new File(UtilMgr.con(SAVEFOLDER + File.separator+ filename));
+			File file = new File(SAVEFOLDER + File.separator+ filename);
 			byte b[] = new byte[(int) file.length()];
 			res.setHeader("Accept-Ranges", "bytes");
 			String strClient = req.getHeader("User-Agent");
-			if (strClient.indexOf("MSIE6.0")!=-1) {
+			if (strClient.indexOf("MSIE6.0") != -1) {
 				res.setContentType("application/smnet;charset=utf-8");
 				res.setHeader("Content-Disposition", "filename=" + filename + ";");
 			} else {
@@ -232,7 +237,6 @@ public class BoardMgr {
 			}
 			out.clear();
 			out = pageContext.pushBody();
-			
 			if (file.isFile()) {
 				BufferedInputStream fin = new BufferedInputStream(
 						new FileInputStream(file));
@@ -247,6 +251,39 @@ public class BoardMgr {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	// 게시물 삭제
+	public void deleteBoard(int num) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+		
+		try {
+			con = pool.getConnection();
+			sql = "select filename from tblBoard where num = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next() && rs.getString(1) != null) {
+				if(!rs.getString(1).equals("")) {
+					File file = new File(SAVEFOLDER + "/" + rs.getString(1));
+					if(file.exists());
+						UtilMgr.delete(SAVEFOLDER + "/" + rs.getString(1));
+				}
+			}
+			
+			sql = "delete from tblBoard where num=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
 		}
 	}
 	
