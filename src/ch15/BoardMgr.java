@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 
 public class BoardMgr {
 	private DBConnectionMgr pool;
-	private static final String SAVEFOLDER = "C:/Jsp/jspStudy/WebContent/ch15/fileupload";//C:\jsp\jspStudy\WebContent\ch15\fileupload
+	private static final String SAVEFOLDER = "C:/Jsp/myapp/WebContent/ch15/fileupload";//C:\jsp\jspStudy\WebContent\ch15\fileupload
 	private static final String ENCTYPE = "UTF-8";
 	private static final int MAXSIZE = 5*1024*1024;
 	
