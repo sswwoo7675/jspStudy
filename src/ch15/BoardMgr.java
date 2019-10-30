@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 
 public class BoardMgr {
 	private DBConnectionMgr pool;
-	private static final String SAVEFOLDER = "C:/Jsp/myapp/WebContent/ch15/fileupload";//C:\jsp\jspStudy\WebContent\ch15\fileupload
+	private static final String SAVEFOLDER = "C:/Jsp/jspStudy/WebContent/ch15/fileupload";//C:\jsp\jspStudy\WebContent\ch15\fileupload
 	private static final String ENCTYPE = "UTF-8";
 	private static final int MAXSIZE = 5*1024*1024;
 	
@@ -284,6 +284,55 @@ public class BoardMgr {
 			e.printStackTrace();
 		} finally {
 			pool.freeConnection(con, pstmt, rs);
+		}
+	}
+	
+	//답변의 위치값 증가
+	public void replyUpBoard(int ref, int pos) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			con = pool.getConnection();
+			sql = "update tblBoard set pos=pos+1 where ref=? and pos > ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, ref);
+			pstmt.setInt(2, pos);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
+	
+	//게시물 답변
+	public void replyBoard(BoardBean bean) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			con = pool.getConnection();
+			sql = "insert tblBoard(name,content,subject,ref,pos,depth,regdate,pass,count,ip)";
+			sql += "values(?,?,?,?,?,?,now(),?,0,?)";
+			int depth = bean.getDepth() + 1;
+			int pos = bean.getPos() + 1;
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bean.getName());
+			pstmt.setString(2, bean.getContent());
+			pstmt.setString(3, bean.getSubject());
+			pstmt.setInt(4, bean.getRef());
+			pstmt.setInt(5, pos);
+			pstmt.setInt(6, depth);
+			pstmt.setString(7, bean.getPass());
+			pstmt.setString(8, bean.getIp());
+			pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			pool.freeConnection(con,pstmt);
 		}
 	}
 	

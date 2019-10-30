@@ -12,7 +12,24 @@ import javax.servlet.http.HttpServletResponse;
 public class BoardReplyServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		request.setCharacterEncoding("utf-8");
+		BoardMgr bMgr = new BoardMgr();
+		BoardBean reBean = new BoardBean();
+		reBean.setName(request.getParameter("name"));
+		reBean.setSubject(request.getParameter("subject"));
+		reBean.setContent(request.getParameter("content"));
+		reBean.setRef(Integer.parseInt(request.getParameter("ref")));
+		reBean.setPos(Integer.parseInt(request.getParameter("pos")));
+		reBean.setDepth(Integer.parseInt(request.getParameter("depth")));
+		reBean.setPass(request.getParameter("pass"));
+		reBean.setIp(request.getParameter("ip"));
+		
+		bMgr.replyUpBoard(reBean.getRef(), reBean.getPos());
+		bMgr.replyBoard(reBean);
+		
+		String nowPage = request.getParameter("nowPage");
+		response.sendRedirect("list.jsp?nowPage="+nowPage);
 	}
 
 }
