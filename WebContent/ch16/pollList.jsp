@@ -10,6 +10,7 @@
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor="#FFFFCC">
+<div align="center">
 	<br/>
 	<h2>투표프로그램</h2>
 	<hr width="600">
@@ -55,5 +56,6 @@
 		</td>
 		</tr>
 	</table>
+</div>
 </body>
 </html>
