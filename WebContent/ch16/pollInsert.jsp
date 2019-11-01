@@ -39,6 +39,66 @@
 	}
 %>
 				</tr>
+				<tr>
+					<td>시작일</td>
+					<td>
+						<select name="sdateY">
+							<option value="2019">2019
+							<option value="2020">2020
+						</select>년
+						<select name="sdateM">
+<%
+	for(int i = 1; i<=12; i++){
+		out.println("<option value='" + i + "'>" + i);
+	}
+%>
+						</select>월
+						<select name="sdateD">
+<%
+	for(int  i=1; i<=31; i++){
+		out.println("<option value='" + i + "'>" + i);
+	}
+%>
+						</select>일
+					</td>
+				</tr>
+				<tr>
+					<td>종료일</td>
+					<td>
+						<select name="edateY">
+							<option value="2019">2019
+							<option value="2020">2020
+						</select>년
+						<select name="edateM">
+<%
+	for(int i = 1; i<=12; i++){
+		out.println("<option value='" + i + "'>" + i);
+	}
+%>
+						</select>월
+						<select name="edateD">
+<%
+	for(int  i=1; i<=31; i++){
+		out.println("<option value='" + i + "'>" + i);
+	}
+%>
+						</select>일
+					</td>
+				</tr>
+				<tr>
+					<td>복수투표</td>
+					<td>
+						<input type="radio" name="type" value="1" checked>yes
+						<input type="radio" name="type" value="0">no
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2>
+						<input type="submit" value="작성하기"> 
+						<input type="reset" value="다시쓰기"> 
+						<input type="button" value="리스트" onClick="javascript:location.href='pollList.jsp'">
+					</td>
+				</tr>
 			</table>
 		</form>
 	</div>
