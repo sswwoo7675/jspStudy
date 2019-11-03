@@ -169,4 +169,122 @@ public class PollMgr {
 		}
 		return flag;
 	}
+	
+	//투표하기
+	public boolean updatePoll(int num, String[] itemnum) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean flag = false;
+		String sql = null;
+		
+		try {
+			con = pool.getConnection();
+			sql = "update tblPollItem set count = count + 1 where listnum=? and itemnum=?";
+			pstmt = con.prepareStatement(sql);
+			
+			if(num == 0)
+				num = getMaxNum();
+			for (int i = 0; i<itemnum.length; i++) {
+				if(itemnum[i] == null || itemnum[i].equals(""))
+					break;
+				pstmt.setInt(1, num);
+				pstmt.setInt(2, Integer.parseInt(itemnum[i]));
+				int j = pstmt.executeUpdate();
+				if(j>0)
+					flag = true;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con,pstmt);
+		}
+		return flag;
+	}
+	
+	public int sumCount(int num) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		int count = 0;
+		
+		try {
+			con = pool.getConnection();
+			sql = "select sum(count) from tblPollItem where listnum=?";
+			pstmt = con.prepareStatement(sql);
+			
+			if(num == 0)
+				pstmt.setInt(1, getMaxNum());
+			else
+				pstmt.setInt(1, num);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	return count;
+	}
+	
+	public Vector<PollItemBean> getView(int num){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<PollItemBean> vlist = new Vector<PollItemBean>();
+		
+		try {
+			con = pool.getConnection();
+			sql = "select item,count from tblPollItem where listnum=?";
+			pstmt = con.prepareStatement(sql);
+			
+			if (num==0)
+				pstmt.setInt(1, getMaxNum());
+			else
+				pstmt.setInt(1, num);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				PollItemBean piBean = new PollItemBean();
+				String item[] = new String[1];
+				item[0] = rs.getString(1);
+				piBean.setItem(item);
+				piBean.setCount(rs.getInt(2));
+				vlist.add(piBean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
